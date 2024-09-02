@@ -60,6 +60,7 @@ namespace TaskManager.Controllers
                 var key = await _authService.Login(loginModel);
                 HttpContext context = HttpContext;
 
+                //for ease of use with swagger
                 context.Response.Cookies.Append("jwt", key);
 
                 return Ok(key);
