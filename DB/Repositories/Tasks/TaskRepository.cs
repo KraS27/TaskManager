@@ -41,6 +41,7 @@ namespace TaskManager.DB.Repositories.Tasks
         public async Task<ICollection<TaskModelDTO>?> GetAllAsync(Guid userId, TaskFilters filters)
         {
             var tasks = _context.Tasks
+                .AsNoTracking()
                 .Where(t => t.User.Id == userId)
                 .Select(t => new TaskModelDTO
                 {
@@ -51,7 +52,7 @@ namespace TaskManager.DB.Repositories.Tasks
                     Priority = t.Priority,
                     Status = t.Status,
                 })
-                .OrderBy(t => t.Id)
+                .OrderBy(t => t.Id)               
                 .AsQueryable();
 
             return await ApplyFilters(filters, tasks).ToListAsync();
@@ -71,13 +72,11 @@ namespace TaskManager.DB.Repositories.Tasks
             if (filters.pageSize > 20)
                 throw new PaginationException("PageSize value should not exceed 20");
 
-
             if (filters.status.HasValue)
                 query = query.Where(t => t.Status == filters.status.Value);
 
             if (filters.dueDate.HasValue)
                 query = query.Where(t => t.DueDate == filters.dueDate.Value);
-
 
             if (filters.priority.HasValue)
                 query = query.Where(t => t.Priority == filters.priority.Value);

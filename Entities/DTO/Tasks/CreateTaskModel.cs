@@ -13,8 +13,6 @@ namespace TaskManager.Entities.DTO.Tasks
 
         public Status Status { get; set; }
 
-        public Priority Priority { get; set; }
-
-        public Guid UserId { get; set; }
+        public Priority Priority { get; set; }        
     }
 }

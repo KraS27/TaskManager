@@ -9,11 +9,15 @@ namespace TaskManager.BL.Auth
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _config;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IUserRepository userRepository, IConfiguration config)
+        public AuthService(IUserRepository userRepository, 
+            IConfiguration config, 
+            ILogger<AuthService> logger)
         {
             _userRepository = userRepository;
             _config = config;
+            _logger = logger;
         }
 
         public async Task RegisterAsync(RegisterModel registerModel)
@@ -35,11 +39,12 @@ namespace TaskManager.BL.Auth
                 UserName = registerModel.UserName,
                 Email = registerModel.Email,
                 PasswordHash = hashedPassword,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             await _userRepository.CreateAsync(user);
+            _logger.LogInformation($"User {user.UserName} register at {user.CreatedAt}");
         }
 
         public async Task<JwtResponseModel> LoginAsync(LoginModel loginModel)

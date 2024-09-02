@@ -1,9 +1,6 @@
-
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security;
 using System.Text;
 using System.Text.Json.Serialization;
 using TaskManager.BL.Auth;
@@ -11,11 +8,7 @@ using TaskManager.BL.Tasks;
 using TaskManager.DB;
 using TaskManager.DB.Repositories.Tasks;
 using TaskManager.DB.Repositories.User;
-using TaskManager.Entities.DTO.Auth;
-using TaskManager.Entities.DTO.Tasks;
 using TaskManager.Extensions;
-using TaskManager.Validators.Auth;
-using TaskManager.Validators.Tasks;
 
 namespace TaskManager
 {
@@ -25,6 +18,10 @@ namespace TaskManager
         {
             var builder = WebApplication.CreateBuilder(args);
             var MsSqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            builder.Logging.AddDebug();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
