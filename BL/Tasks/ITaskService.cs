@@ -5,7 +5,7 @@ namespace TaskManager.BL.Tasks
 {
     public interface ITaskService
     {
-        public Task<ICollection<TaskModel>?> GetAllAsync();
+        public Task<ICollection<ForListTaskModel>?> GetAllAsync();
 
         public Task<TaskModel?> GetAsync(Guid taskId);
 

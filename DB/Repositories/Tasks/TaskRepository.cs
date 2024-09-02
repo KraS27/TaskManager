@@ -33,10 +33,19 @@ namespace TaskManager.DB.Repositories.Tasks
                 .FirstOrDefaultAsync(t => t.User.Id == userId && t.Id == taskId);
         }
 
-        public async Task<ICollection<TaskModel>?> GetAllAsync(Guid userId)
+        public async Task<ICollection<ForListTaskModel>?> GetAllAsync(Guid userId)
         {
             return await _context.Tasks
                 .Where(t => t.User.Id == userId)
+                .Select(t => new ForListTaskModel
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Description = t.Description,
+                    DueDate = t.DueDate,
+                    Priority = t.Priority,
+                    Status = t.Status,
+                })
                 .ToListAsync();
         }
 

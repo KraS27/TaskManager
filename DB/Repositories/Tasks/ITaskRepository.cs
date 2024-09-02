@@ -5,7 +5,7 @@ namespace TaskManager.DB.Repositories.Tasks
 {
     public interface ITaskRepository
     {
-        public Task<ICollection<TaskModel>?> GetAllAsync(Guid userId);
+        public Task<ICollection<ForListTaskModel>?> GetAllAsync(Guid userId);
 
         public Task<TaskModel?> GetAsync(Guid userId, Guid TaskId);
 

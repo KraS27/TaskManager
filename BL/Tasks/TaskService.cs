@@ -65,7 +65,7 @@ namespace TaskManager.BL.Tasks
             return await _taskRepository.GetAsync(userId, taskId);
         }
 
-        public Task<ICollection<TaskModel>?> GetAllAsync()
+        public Task<ICollection<ForListTaskModel>?> GetAllAsync()
         {
             return _taskRepository.GetAllAsync(userId);
         }
