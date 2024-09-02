@@ -13,32 +13,34 @@ namespace TaskManager.DB.Repositories.Tasks
             _context = context;
         }
 
-        public async Task Create(TaskModel taskModel)
+        public async Task<Guid> CreateAsync(TaskModel taskModel)
         {
             await _context.AddAsync(taskModel);
             await _context.SaveChangesAsync();
+
+            return taskModel.Id;
         }
 
-        public async Task Delete(TaskModel taskModel)
+        public async Task DeleteAsync(TaskModel taskModel)
         {
             _context.Remove(taskModel);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<TaskModel?> Get(Guid userId, Guid taskId)
+        public async Task<TaskModel?> GetAsync(Guid userId, Guid taskId)
         {
             return await _context.Tasks
                 .FirstOrDefaultAsync(t => t.User.Id == userId && t.Id == taskId);
         }
 
-        public async Task<ICollection<TaskModel>?> GetAll(Guid userId)
+        public async Task<ICollection<TaskModel>?> GetAllAsync(Guid userId)
         {
             return await _context.Tasks
                 .Where(t => t.User.Id == userId)
                 .ToListAsync();
         }
 
-        public async Task Update(TaskModel taskModel, UpdateTaskModel updateTaskModel)
+        public async Task UpdateAsync(TaskModel taskModel, UpdateTaskModel updateTaskModel)
         {
             taskModel.Title = updateTaskModel.Title;
             taskModel.Description = updateTaskModel.Description;

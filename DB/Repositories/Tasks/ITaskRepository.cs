@@ -5,14 +5,14 @@ namespace TaskManager.DB.Repositories.Tasks
 {
     public interface ITaskRepository
     {
-        public Task<ICollection<TaskModel>?> GetAll(Guid userId);
+        public Task<ICollection<TaskModel>?> GetAllAsync(Guid userId);
 
-        public Task<TaskModel?> Get(Guid userId, Guid TaskId);
+        public Task<TaskModel?> GetAsync(Guid userId, Guid TaskId);
 
-        public Task Create(TaskModel createTaskModel);
+        public Task<Guid> CreateAsync(TaskModel taskModel);
 
-        public Task Update(TaskModel taskModel, UpdateTaskModel updateTaskModel);
+        public Task UpdateAsync(TaskModel taskModel, UpdateTaskModel updateTaskModel);
 
-        public Task Delete(TaskModel taskModel);
+        public Task DeleteAsync(TaskModel taskModel);
     }
 }

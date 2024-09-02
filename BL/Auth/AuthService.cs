@@ -16,7 +16,7 @@ namespace TaskManager.BL.Auth
             _config = config;
         }
 
-        public async Task Register(RegisterModel registerModel)
+        public async Task RegisterAsync(RegisterModel registerModel)
         {
             var hashedPassword = PasswordHasher.HashPassword(registerModel.Password);
 
@@ -42,7 +42,7 @@ namespace TaskManager.BL.Auth
             await _userRepository.CreateAsync(user);
         }
 
-        public async Task<JwtResponseModel> Login(LoginModel loginModel)
+        public async Task<JwtResponseModel> LoginAsync(LoginModel loginModel)
         {
             var user = await _userRepository.GetAsync(loginModel.Login);
 

@@ -34,7 +34,7 @@ namespace TaskManager.Controllers
 
             try
             {
-                await _authService.Register(registerModel);
+                await _authService.RegisterAsync(registerModel);
                 return Ok();
             }
             catch (AlreadyExistException ex)
@@ -57,7 +57,7 @@ namespace TaskManager.Controllers
 
             try
             {
-                var response = await _authService.Login(loginModel);
+                var response = await _authService.LoginAsync(loginModel);
                 HttpContext context = HttpContext;
 
                 //for ease of use with swagger
