@@ -34,8 +34,8 @@ namespace TaskManager
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
-                //options.UseNpgsql(postgresConnection);
-                options.UseSqlServer(MsSqlConnectionString);
+                options.UseNpgsql(postgresConnection);
+                //options.UseSqlServer(MsSqlConnectionString);
             });
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -78,8 +78,8 @@ namespace TaskManager
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                //apply migration when run container
-                //app.ApplyMigration();
+                //apply migration when first run container
+                app.ApplyMigration();
             }
 
             app.UseHttpsRedirection();
