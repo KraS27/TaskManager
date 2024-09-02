@@ -5,6 +5,7 @@ using TaskManager.BL.Tasks;
 using TaskManager.Entities.DTO.Auth;
 using TaskManager.Entities.DTO.Tasks;
 using TaskManager.Entities.Exceptions;
+using TaskManager.Entities.Structs;
 
 namespace TaskManager.Controllers
 {
@@ -30,11 +31,11 @@ namespace TaskManager.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
             try
             {
-                var tasks = await _taskService.GetAllAsync();                
+                var tasks = await _taskService.GetAllAsync(new Pagination<TaskModelDTO>(page, pageSize));                
 
                 return Ok(tasks);
             }

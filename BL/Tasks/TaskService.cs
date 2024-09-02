@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+﻿    using System.Security.Claims;
 using TaskManager.DB.Repositories.Tasks;
 using TaskManager.DB.Repositories.User;
 using TaskManager.Entities.Constants;
@@ -6,6 +6,7 @@ using TaskManager.Entities.DB;
 using TaskManager.Entities.DTO.Auth;
 using TaskManager.Entities.DTO.Tasks;
 using TaskManager.Entities.Exceptions;
+using TaskManager.Entities.Structs;
 
 namespace TaskManager.BL.Tasks
 {
@@ -65,9 +66,9 @@ namespace TaskManager.BL.Tasks
             return await _taskRepository.GetAsync(userId, taskId);
         }
 
-        public Task<ICollection<ForListTaskModel>?> GetAllAsync()
+        public Task<ICollection<TaskModelDTO>?> GetAllAsync(Pagination<TaskModelDTO> pagination)
         {
-            return _taskRepository.GetAllAsync(userId);
+            return _taskRepository.GetAllAsync(userId, pagination);
         }
 
         public async Task UpdateAsync(UpdateTaskModel updateTaskModel)

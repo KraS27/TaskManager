@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManager.Entities.DB;
 using TaskManager.Entities.DTO.Tasks;
+using TaskManager.Entities.Structs;
 
 namespace TaskManager.DB.Repositories.Tasks
 {
@@ -33,11 +34,11 @@ namespace TaskManager.DB.Repositories.Tasks
                 .FirstOrDefaultAsync(t => t.User.Id == userId && t.Id == taskId);
         }
 
-        public async Task<ICollection<ForListTaskModel>?> GetAllAsync(Guid userId)
+        public async Task<ICollection<TaskModelDTO>?> GetAllAsync(Guid userId, Pagination<TaskModelDTO> pagination)
         {
-            return await _context.Tasks
+            var tasks = _context.Tasks
                 .Where(t => t.User.Id == userId)
-                .Select(t => new ForListTaskModel
+                .Select(t => new TaskModelDTO
                 {
                     Id = t.Id,
                     Title = t.Title,
@@ -46,7 +47,10 @@ namespace TaskManager.DB.Repositories.Tasks
                     Priority = t.Priority,
                     Status = t.Status,
                 })
-                .ToListAsync();
+                .OrderBy(t => t.Id)
+                .AsQueryable();
+
+            return await pagination.Apply(tasks).ToListAsync();
         }
 
         public async Task UpdateAsync()

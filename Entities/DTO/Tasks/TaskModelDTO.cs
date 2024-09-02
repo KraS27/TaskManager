@@ -3,7 +3,7 @@ using TaskManager.Entities.Enums;
 
 namespace TaskManager.Entities.DTO.Tasks
 {
-    public class ForListTaskModel
+    public class TaskModelDTO
     {
         public Guid Id { get; set; }
 
