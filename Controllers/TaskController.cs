@@ -37,7 +37,7 @@ namespace TaskManager.Controllers
             {
                 var tasks = await _taskService.GetAllAsync(filters);                
 
-                return Ok(tasks);
+                return Ok(new {count = tasks.Count, tasks = tasks});
             }
             catch (Exception ex)
             {

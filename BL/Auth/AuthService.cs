@@ -10,6 +10,7 @@ namespace TaskManager.BL.Auth
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _config;
         private readonly ILogger<AuthService> _logger;
+        private const int TIME_DIFFERENCE = 3;
 
         public AuthService(IUserRepository userRepository, 
             IConfiguration config, 
@@ -62,7 +63,7 @@ namespace TaskManager.BL.Auth
             var response = new JwtResponseModel
             {
                 AccessToken = JwtProvider.GenerateToken(user, _config),
-                ExpirationDate = DateTime.UtcNow.AddHours(exparationTime)
+                ExpirationDate = DateTime.UtcNow.AddHours(exparationTime + TIME_DIFFERENCE)
             };
        
             return response;

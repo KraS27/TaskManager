@@ -18,7 +18,7 @@ namespace TaskManager
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            //var MsSqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var MsSqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             var postgresConnection = builder.Configuration.GetConnectionString("PostgresConnection");
 
             builder.Logging.ClearProviders();
@@ -34,8 +34,8 @@ namespace TaskManager
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseNpgsql(postgresConnection);
-                //options.UseSqlServer(MsSqlConnectionString);
+                //options.UseNpgsql(postgresConnection);
+                options.UseSqlServer(MsSqlConnectionString);
             });
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -79,7 +79,7 @@ namespace TaskManager
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 //apply migration when run container
-                app.ApplyMigration();
+                //app.ApplyMigration();
             }
 
             app.UseHttpsRedirection();
