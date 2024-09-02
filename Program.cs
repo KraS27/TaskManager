@@ -7,10 +7,14 @@ using System.Security;
 using System.Text;
 using System.Text.Json.Serialization;
 using TaskManager.BL.Auth;
+using TaskManager.BL.Tasks;
 using TaskManager.DB;
+using TaskManager.DB.Repositories.Tasks;
 using TaskManager.DB.Repositories.User;
 using TaskManager.Entities.DTO.Auth;
+using TaskManager.Entities.DTO.Tasks;
 using TaskManager.Validators.Auth;
+using TaskManager.Validators.Tasks;
 
 namespace TaskManager
 {
@@ -61,9 +65,13 @@ namespace TaskManager
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
 
             builder.Services.AddTransient<IValidator<RegisterModel>, RegisterModelValidator>();
             builder.Services.AddTransient<IValidator<LoginModel>, LoginModelValidator>();
+            builder.Services.AddTransient<IValidator<CreateTaskModel>, CreateTaskModelValidator>();
+            builder.Services.AddTransient<IValidator<UpdateTaskModel>, UpdateTaskModelValidator>();
 
             var app = builder.Build();
 
