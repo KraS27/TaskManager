@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using TaskManager.DB.Repositories.Tasks;
+using TaskManager.DB.Repositories.User;
 using TaskManager.Entities.Constants;
 using TaskManager.Entities.DB;
 using TaskManager.Entities.DTO.Auth;
@@ -10,19 +11,28 @@ namespace TaskManager.BL.Tasks
 {
     public class TaskService : ITaskService
     {
-        private readonly ITaskRepository _taskRepository;      
+        private readonly ITaskRepository _taskRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly Guid userId;
 
-        public TaskService(ITaskRepository taskRepository, IHttpContextAccessor contextAccessor)
+        public TaskService(ITaskRepository taskRepository, 
+            IHttpContextAccessor contextAccessor, 
+            IUserRepository userRepository)
         {
             _taskRepository = taskRepository;
             _contextAccessor = contextAccessor;
             userId = Guid.Parse(_contextAccessor.HttpContext.User.FindFirstValue(CustomClaims.UserId));
+            _userRepository = userRepository;
         }
 
         public async Task<Guid> CreateAsync(CreateTaskModel createTaskModel)
         {          
+            var user = await _userRepository.GetAsync(userId);
+
+            if(user == null) 
+                throw new NotFoundException($"User with such id not found");
+
             var newTask = new TaskModel
             {
                 Id = Guid.NewGuid(),
@@ -33,7 +43,7 @@ namespace TaskManager.BL.Tasks
                 Status = createTaskModel.Status,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,      
-                User = new UserModel { Id = userId}
+                User = user
             };
 
             await _taskRepository.CreateAsync(newTask);

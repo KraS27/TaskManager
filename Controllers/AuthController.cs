@@ -67,7 +67,7 @@ namespace TaskManager.Controllers
             }
             catch (NotFoundException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
             catch (InvalidPasswordException ex)
             {
