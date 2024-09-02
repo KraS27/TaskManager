@@ -13,6 +13,7 @@ using TaskManager.DB.Repositories.Tasks;
 using TaskManager.DB.Repositories.User;
 using TaskManager.Entities.DTO.Auth;
 using TaskManager.Entities.DTO.Tasks;
+using TaskManager.Extensions;
 using TaskManager.Validators.Auth;
 using TaskManager.Validators.Tasks;
 
@@ -68,10 +69,7 @@ namespace TaskManager
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
             builder.Services.AddScoped<ITaskService, TaskService>();
 
-            builder.Services.AddTransient<IValidator<RegisterModel>, RegisterModelValidator>();
-            builder.Services.AddTransient<IValidator<LoginModel>, LoginModelValidator>();
-            builder.Services.AddTransient<IValidator<CreateTaskModel>, CreateTaskModelValidator>();
-            builder.Services.AddTransient<IValidator<UpdateTaskModel>, UpdateTaskModelValidator>();
+            builder.Services.RegisterValidators();
 
             var app = builder.Build();
 
