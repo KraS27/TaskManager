@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.DB;
+using TaskManager.DB.Repositories.User;
 using TaskManager.Entities.DB;
 using TaskManager.Entities.DTO.Auth;
 using TaskManager.Entities.Exceptions;
@@ -9,12 +10,12 @@ namespace TaskManager.BL.Auth
 {
     public class AuthService : IAuthService
     {
-        private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IConfiguration _config;
 
-        public AuthService(AppDbContext context, IConfiguration config)
+        public AuthService(IUserRepository userRepository, IConfiguration config)
         {
-            _context = context;
+            _userRepository = userRepository;
             _config = config;
         }
 
@@ -22,10 +23,7 @@ namespace TaskManager.BL.Auth
         {
             var hashedPassword = PasswordHasher.HashPassword(registerModel.Password);
 
-            var existingUser = await _context.Users
-                .FirstOrDefaultAsync(
-                x => x.UserName == registerModel.UserName || 
-                x.Email == registerModel.Email);
+            var existingUser = await _userRepository.GetAsync(registerModel.UserName, registerModel.Email);
 
             if (existingUser != null)
             {
@@ -44,16 +42,12 @@ namespace TaskManager.BL.Auth
                 UpdatedAt = DateTime.UtcNow
             };
 
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            await _userRepository.CreateAsync(user);
         }
 
         public async Task<string> Login(LoginModel loginModel)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(
-                x => x.UserName == loginModel.Login || 
-                x.Email == loginModel.Login);
+            var user = await _userRepository.GetAsync(loginModel.Login);
 
             if (user == null)
                 throw new NotFoundException($"User with login: {loginModel.Login} not found");
