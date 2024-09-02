@@ -1,6 +1,11 @@
 
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using TaskManager.BL.Auth;
 using TaskManager.DB;
+using TaskManager.DB.Repositories.User;
+using TaskManager.Entities.DTO.Auth;
+using TaskManager.Validators.Auth;
 
 namespace TaskManager
 {
@@ -19,6 +24,12 @@ namespace TaskManager
             {
                 options.UseSqlServer(MsSqlConnectionString);
             });
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            builder.Services.AddTransient<IValidator<RegisterModel>, RegisterModelValidator>();
+            builder.Services.AddTransient<IValidator<LoginModel>, LoginModelValidator>();
 
             var app = builder.Build();
 

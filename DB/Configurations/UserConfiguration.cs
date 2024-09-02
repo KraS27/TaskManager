@@ -13,7 +13,7 @@ namespace TaskManager.DB.Configurations
             builder.HasKey(u => u.Id);
 
             builder.Property(u => u.UserName)
-                .HasColumnName("userName")
+                .HasColumnName("userName")              
                 .HasMaxLength(24)
                 .IsRequired();
 

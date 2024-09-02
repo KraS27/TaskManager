@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using TaskManager.Entities.DB;
 
 namespace TaskManager.DB
@@ -10,5 +11,10 @@ namespace TaskManager.DB
         public DbSet<UserModel> Users { get; set; }
 
         public DbSet<TaskModel> Tasks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }
