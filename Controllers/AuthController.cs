@@ -57,13 +57,13 @@ namespace TaskManager.Controllers
 
             try
             {
-                var key = await _authService.Login(loginModel);
+                var response = await _authService.Login(loginModel);
                 HttpContext context = HttpContext;
 
                 //for ease of use with swagger
-                context.Response.Cookies.Append("jwt", key);
+                context.Response.Cookies.Append("jwt", response.AccessToken);
 
-                return Ok(key);
+                return Ok(response);
             }
             catch (NotFoundException ex)
             {

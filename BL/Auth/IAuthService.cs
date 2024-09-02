@@ -6,6 +6,6 @@ namespace TaskManager.BL.Auth
     {
         public Task Register(RegisterModel registerModel);
 
-        public Task<string> Login(LoginModel loginModel);
+        public Task<JwtResponseModel> Login(LoginModel loginModel);
     }
 }

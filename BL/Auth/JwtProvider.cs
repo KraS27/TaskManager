@@ -11,7 +11,9 @@ namespace TaskManager.BL.Auth
     {
         public static string GenerateToken(UserModel user, IConfiguration config)
         {
-            var key = config["Jwt:Key"];
+            var key = config["Jwt:Key"];    
+            //In hours
+            int exparationTime = Convert.ToInt32(config["Jwt:ExpirationTime"]);
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)), SecurityAlgorithms.HmacSha256);
 
@@ -20,7 +22,7 @@ namespace TaskManager.BL.Auth
             var token = new JwtSecurityToken(
                 signingCredentials: signingCredentials,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(2));
+                expires: DateTime.Now.AddHours(exparationTime));
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 

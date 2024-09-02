@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using TaskManager.DB;
-using TaskManager.DB.Repositories.User;
+﻿using TaskManager.DB.Repositories.User;
 using TaskManager.Entities.DB;
 using TaskManager.Entities.DTO.Auth;
 using TaskManager.Entities.Exceptions;
@@ -45,7 +42,7 @@ namespace TaskManager.BL.Auth
             await _userRepository.CreateAsync(user);
         }
 
-        public async Task<string> Login(LoginModel loginModel)
+        public async Task<JwtResponseModel> Login(LoginModel loginModel)
         {
             var user = await _userRepository.GetAsync(loginModel.Login);
 
@@ -55,9 +52,15 @@ namespace TaskManager.BL.Auth
             if (!PasswordHasher.Verify(loginModel.Password, user.PasswordHash))
                 throw new InvalidPasswordException("Wrong password");
 
-            var token = JwtProvider.GenerateToken(user, _config);
+            int exparationTime = Convert.ToInt32(_config["Jwt:ExpirationTime"]);
 
-            return token;
+            var response = new JwtResponseModel
+            {
+                AccessToken = JwtProvider.GenerateToken(user, _config),
+                ExpirationDate = DateTime.Now.AddHours(exparationTime)
+            };
+       
+            return response;
         }
     }
 }
