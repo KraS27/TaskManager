@@ -31,11 +31,11 @@ namespace TaskManager.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
+        public async Task<IActionResult> GetAll([FromQuery] TaskFilters filters)
         {
             try
             {
-                var tasks = await _taskService.GetAllAsync(new Pagination<TaskModelDTO>(page, pageSize));                
+                var tasks = await _taskService.GetAllAsync(filters);                
 
                 return Ok(tasks);
             }
@@ -66,7 +66,7 @@ namespace TaskManager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTaskModel createTaskModel)
+        public async Task<IActionResult> Create([FromQuery] CreateTaskModel createTaskModel)
         {
             var validationResult = _createTaskValidator.Validate(createTaskModel);
             if (!validationResult.IsValid)
@@ -110,7 +110,7 @@ namespace TaskManager.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody]UpdateTaskModel updateTaskModel)
+        public async Task<IActionResult> Update([FromQuery] UpdateTaskModel updateTaskModel)
         {
             var validationResult = _UpdateTaskValidator.Validate(updateTaskModel);
             if (!validationResult.IsValid)

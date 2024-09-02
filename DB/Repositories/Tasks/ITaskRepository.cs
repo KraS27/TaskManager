@@ -6,7 +6,7 @@ namespace TaskManager.DB.Repositories.Tasks
 {
     public interface ITaskRepository
     {
-        public Task<ICollection<TaskModelDTO>?> GetAllAsync(Guid userId, Pagination<TaskModelDTO> pagination);
+        public Task<ICollection<TaskModelDTO>?> GetAllAsync(Guid userId, TaskFilters filters);
 
         public Task<TaskModel?> GetAsync(Guid userId, Guid TaskId);
 

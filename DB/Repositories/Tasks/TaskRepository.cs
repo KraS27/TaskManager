@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
+using System.Globalization;
 using TaskManager.Entities.DB;
 using TaskManager.Entities.DTO.Tasks;
+using TaskManager.Entities.Enums;
+using TaskManager.Entities.Exceptions;
 using TaskManager.Entities.Structs;
 
 namespace TaskManager.DB.Repositories.Tasks
@@ -34,7 +38,7 @@ namespace TaskManager.DB.Repositories.Tasks
                 .FirstOrDefaultAsync(t => t.User.Id == userId && t.Id == taskId);
         }
 
-        public async Task<ICollection<TaskModelDTO>?> GetAllAsync(Guid userId, Pagination<TaskModelDTO> pagination)
+        public async Task<ICollection<TaskModelDTO>?> GetAllAsync(Guid userId, TaskFilters filters)
         {
             var tasks = _context.Tasks
                 .Where(t => t.User.Id == userId)
@@ -50,12 +54,48 @@ namespace TaskManager.DB.Repositories.Tasks
                 .OrderBy(t => t.Id)
                 .AsQueryable();
 
-            return await pagination.Apply(tasks).ToListAsync();
+            return await ApplyFilters(filters, tasks).ToListAsync();
         }
 
         public async Task UpdateAsync()
         {            
             await _context.SaveChangesAsync();
+        }
+
+        private IQueryable<TaskModelDTO> ApplyFilters(TaskFilters filters ,IQueryable<TaskModelDTO> query)
+        {
+            // Apply filters
+            if (filters.pageNumber < 1)
+                throw new PaginationException("Page must be greater than 0");
+
+            if (filters.pageSize > 20)
+                throw new PaginationException("PageSize value should not exceed 20");
+
+
+            if (filters.status.HasValue)
+                query = query.Where(t => t.Status == filters.status.Value);
+
+            if (filters.dueDate.HasValue)
+                query = query.Where(t => t.DueDate == filters.dueDate.Value);
+
+
+            if (filters.priority.HasValue)
+                query = query.Where(t => t.Priority == filters.priority.Value);
+
+            // Apply sorting
+            switch (filters.sortBy.ToLower())
+            {
+                case "priority":
+                    query = filters.ascending ? query.OrderBy(t => t.Priority) : query.OrderByDescending(t => t.Priority);
+                    break;
+                default:
+                    query = filters.ascending ? query.OrderBy(t => t.DueDate) : query.OrderByDescending(t => t.DueDate);
+                    break;
+            }
+
+            // Apply pagination        
+            int skip = (filters.pageNumber - 1) * filters.pageSize;
+            return query.Skip(skip).Take(filters.pageSize);
         }
     }
 }

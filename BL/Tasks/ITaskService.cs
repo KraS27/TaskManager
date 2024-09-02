@@ -6,7 +6,7 @@ namespace TaskManager.BL.Tasks
 {
     public interface ITaskService
     {
-        public Task<ICollection<TaskModelDTO>?> GetAllAsync(Pagination<TaskModelDTO> pagination);
+        public Task<ICollection<TaskModelDTO>?> GetAllAsync(TaskFilters filters);
 
         public Task<TaskModel?> GetAsync(Guid taskId);
 
@@ -15,5 +15,7 @@ namespace TaskManager.BL.Tasks
         public Task UpdateAsync(UpdateTaskModel updateTaskModel);
 
         public Task DeleteAsync(Guid taskId);
+
+
     }
 }
