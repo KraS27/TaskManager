@@ -22,7 +22,7 @@ namespace TaskManager.BL.Auth
             var token = new JwtSecurityToken(
                 signingCredentials: signingCredentials,
                 claims: claims,
-                expires: DateTime.Now.AddHours(exparationTime));
+                expires: DateTime.UtcNow.AddHours(exparationTime));
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 

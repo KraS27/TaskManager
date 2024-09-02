@@ -1,11 +1,9 @@
-﻿    using System.Security.Claims;
+﻿using System.Security.Claims;
 using TaskManager.DB.Repositories.Tasks;
 using TaskManager.DB.Repositories.User;
 using TaskManager.Entities.Constants;
 using TaskManager.Entities.DB;
-using TaskManager.Entities.DTO.Auth;
 using TaskManager.Entities.DTO.Tasks;
-using TaskManager.Entities.Enums;
 using TaskManager.Entities.Exceptions;
 using TaskManager.Entities.Structs;
 
@@ -57,8 +55,8 @@ namespace TaskManager.BL.Tasks
                 DueDate = createTaskModel.DueDate,
                 Priority = createTaskModel.Priority,
                 Status = createTaskModel.Status,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,      
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,      
                 User = user
             };
 
@@ -110,7 +108,7 @@ namespace TaskManager.BL.Tasks
             task.Priority = updateTaskModel.Priority;
             task.Status = updateTaskModel.Status;
             task.DueDate = updateTaskModel.DueDate;
-            task.UpdatedAt = DateTime.Now;
+            task.UpdatedAt = DateTime.UtcNow;
 
             await _taskRepository.UpdateAsync();
             _logger.LogInformation("Task with id {TaskId} updated by user {UserId}", task.Id, userId);

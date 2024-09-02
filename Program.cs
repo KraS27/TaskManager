@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using modLib.Entities.Extensions;
 using System.Text;
 using System.Text.Json.Serialization;
 using TaskManager.BL.Auth;
@@ -17,7 +18,8 @@ namespace TaskManager
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var MsSqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            //var MsSqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var postgresConnection = builder.Configuration.GetConnectionString("PostgresConnection");
 
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
@@ -32,7 +34,8 @@ namespace TaskManager
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(MsSqlConnectionString);
+                options.UseNpgsql(postgresConnection);
+                //options.UseSqlServer(MsSqlConnectionString);
             });
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -75,6 +78,8 @@ namespace TaskManager
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                //apply migration when run container
+                app.ApplyMigration();
             }
 
             app.UseHttpsRedirection();

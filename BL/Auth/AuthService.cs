@@ -39,8 +39,8 @@ namespace TaskManager.BL.Auth
                 UserName = registerModel.UserName,
                 Email = registerModel.Email,
                 PasswordHash = hashedPassword,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             await _userRepository.CreateAsync(user);
@@ -62,7 +62,7 @@ namespace TaskManager.BL.Auth
             var response = new JwtResponseModel
             {
                 AccessToken = JwtProvider.GenerateToken(user, _config),
-                ExpirationDate = DateTime.Now.AddHours(exparationTime)
+                ExpirationDate = DateTime.UtcNow.AddHours(exparationTime)
             };
        
             return response;
