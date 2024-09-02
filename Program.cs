@@ -64,6 +64,7 @@ namespace TaskManager
 
             builder.Services.AddAuthorization();
 
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();

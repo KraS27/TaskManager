@@ -35,7 +35,7 @@ namespace TaskManager.Controllers
             try
             {
                 await _authService.RegisterAsync(registerModel);
-                return Ok();
+                return Created();
             }
             catch (AlreadyExistException ex)
             {

@@ -32,7 +32,8 @@ namespace TaskManager.Controllers
         {
             try
             {
-                var tasks = await _taskService.GetAllAsync();
+                var tasks = await _taskService.GetAllAsync();                
+
                 return Ok(tasks);
             }
             catch (Exception ex)
