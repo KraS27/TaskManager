@@ -11,7 +11,7 @@ namespace TaskManager.DB.Repositories.Tasks
 
         public Task<Guid> CreateAsync(TaskModel taskModel);
 
-        public Task UpdateAsync(TaskModel taskModel, UpdateTaskModel updateTaskModel);
+        public Task UpdateAsync();
 
         public Task DeleteAsync(TaskModel taskModel);
     }

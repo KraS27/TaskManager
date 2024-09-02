@@ -23,16 +23,21 @@ namespace TaskManager.DB.Repositories.User
         {
             return await _context.Users
                 .FirstOrDefaultAsync(
-                x => x.UserName == username ||
-                x.Email == email);
+                u => u.UserName == username ||
+                u.Email == email);
         }
 
         public async Task<UserModel?> GetAsync(string login)
         {
            return await _context.Users
                 .FirstOrDefaultAsync(
-                x => x.UserName == login ||
-                x.Email == login);
+                u => u.UserName == login ||
+                u.Email == login);
+        }
+
+        public async Task<UserModel?> GetAsync(Guid Id)
+        {
+            return await _context.Users.FindAsync(Id);
         }
     }
 }

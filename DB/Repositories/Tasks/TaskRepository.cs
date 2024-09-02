@@ -40,15 +40,8 @@ namespace TaskManager.DB.Repositories.Tasks
                 .ToListAsync();
         }
 
-        public async Task UpdateAsync(TaskModel taskModel, UpdateTaskModel updateTaskModel)
-        {
-            taskModel.Title = updateTaskModel.Title;
-            taskModel.Description = updateTaskModel.Description;
-            taskModel.Priority = updateTaskModel.Priority;
-            taskModel.Status = updateTaskModel.Status;
-            taskModel.DueDate = updateTaskModel.DueDate;
-            taskModel.UpdatedAt = DateTime.Now;
-
+        public async Task UpdateAsync()
+        {            
             await _context.SaveChangesAsync();
         }
     }

@@ -8,6 +8,8 @@ namespace TaskManager.DB.Repositories.User
 
         public Task<UserModel?> GetAsync(string login);
 
+        public Task<UserModel?> GetAsync(Guid Id);
+
         public Task CreateAsync(UserModel user);
     }
 }

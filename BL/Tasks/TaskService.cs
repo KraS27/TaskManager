@@ -10,7 +10,7 @@ namespace TaskManager.BL.Tasks
 {
     public class TaskService : ITaskService
     {
-        private readonly ITaskRepository _taskRepository;
+        private readonly ITaskRepository _taskRepository;      
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly Guid userId;
 
@@ -22,19 +22,22 @@ namespace TaskManager.BL.Tasks
         }
 
         public async Task<Guid> CreateAsync(CreateTaskModel createTaskModel)
-        {
+        {          
             var newTask = new TaskModel
             {
+                Id = Guid.NewGuid(),
                 Title = createTaskModel.Title,
                 Description = createTaskModel.Description,
                 DueDate = createTaskModel.DueDate,
                 Priority = createTaskModel.Priority,
                 Status = createTaskModel.Status,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,               
+                UpdatedAt = DateTime.Now,      
+                User = new UserModel { Id = userId}
             };
 
-            await _
+            await _taskRepository.CreateAsync(newTask);
+            return newTask.Id;
         }
 
         public async Task DeleteAsync(Guid taskId)
@@ -57,9 +60,21 @@ namespace TaskManager.BL.Tasks
             return _taskRepository.GetAllAsync(userId);
         }
 
-        public Task UpdateAsync(UpdateTaskModel updateTaskModel)
+        public async Task UpdateAsync(UpdateTaskModel updateTaskModel)
         {
-            throw new NotImplementedException();
+            var task = await _taskRepository.GetAsync(userId, updateTaskModel.Id);
+
+            if (task == null)
+                throw new NotFoundException("Task with such id not found");
+
+            task.Title = updateTaskModel.Title;
+            task.Description = updateTaskModel.Description;
+            task.Priority = updateTaskModel.Priority;
+            task.Status = updateTaskModel.Status;
+            task.DueDate = updateTaskModel.DueDate;
+            task.UpdatedAt = DateTime.Now;
+
+            await _taskRepository.UpdateAsync();
         }
     }
 }
