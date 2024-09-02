@@ -28,7 +28,7 @@ Setup Instructions:
 3. Configure Database Connection:
    Update the `appsettings.json` file with the connection string for SQL Server. For Docker, it can be configured as follows:
    "ConnectionStrings": {
-     "DefaultConnection": "Server=localhost,1433;Database=TaskManagementDB;User Id=admin;Password=YourStrongPassword;"
+     "DefaultConnection": "Host=postgres_db;Server=postgres_db;Database=tm;Port=5432;User Id=postgres;Password=123;"
    }
 
 4. Run the Application with Docker:
@@ -40,7 +40,7 @@ Setup Instructions:
    docker-compose exec webapp dotnet ef database update
 
 6. Access the Application:
-   The API will be available at http://localhost:5000.
+   The API will be available at http://localhost:5282.
 
 Running the Project Locally Without Docker:
 
@@ -49,13 +49,13 @@ Running the Project Locally Without Docker:
 2. Update the `appsettings.json` file with the correct connection string.
 
 3. Run the following commands to set up and run the project:
-   # Restore dependencies
+   ! Restore dependencies
    dotnet restore
 
-   # Apply migrations
+   ! Apply migrations
    dotnet ef database update
 
-   # Run the application
+   ! Run the application
    dotnet run
 
 4. The API will be available at http://localhost:5282.
